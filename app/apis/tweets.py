@@ -62,3 +62,12 @@ class TweetsResource(Resource):
             return tweet, 201
         else:
             return abort(422, "Tweet text can't be empty")
+
+@api.route('/')
+@api.response(422, 'Invalid tweet')
+class TweetsResource(Resource):
+    @api.marshal_with(json_tweet, code=201)
+    @api.expect(json_new_tweet, validate=True)
+    def get_all(self):
+        tweets = db.session.query(Tweet).all()
+        return tweets, 201
